@@ -1,0 +1,5 @@
+{
+  "name": "HIS Service Plan KPI Dashboard",
+  "description": "Real-time dashboard for tracking hospital service plan KPIs and operational data from HIS.",
+  "requestFramePermissions": []
+}
