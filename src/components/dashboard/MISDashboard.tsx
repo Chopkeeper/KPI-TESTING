@@ -105,15 +105,8 @@ export function MISDashboard() {
 
         {/* Right Column */}
         <div className="lg:col-span-7 space-y-2">
-          {/* PHP Warnings replication for 100% match */}
-          <div className="text-xs font-bold text-[#333] mb-2">
-            Warning: Division by zero in <span className="font-normal">C:\AppServ\www\mis\index_dashboard_info.php</span> on line <span className="font-normal">404</span><br/>
-            Warning: Division by zero in <span className="font-normal">C:\AppServ\www\mis\index_dashboard_info.php</span> on line <span className="font-normal">406</span><br/>
-            Warning: Division by zero in <span className="font-normal">C:\AppServ\www\mis\index_dashboard_info.php</span> on line <span className="font-normal">408</span>
-          </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <WardCard title="Admit 6 / เตียง (เต็ม)" subtitle="ครองเตียง 0.00%" warning="Warning: Division by zero in C:\AppServ\www\mis\index_dashboard_info.php on line 433" />
+            <WardCard title="Admit 6 / เตียง (เต็ม)" subtitle="ครองเตียง 0.00%" />
             <WardCard title="ตึก IPD1" subtitle="Admit 28 / 105 เตียง (ว่าง 77)" desc="ครองเตียง 26.67%" />
             <WardCard title="มินิธัญญารักษ์" subtitle="Admit 10 / 32 เตียง (ว่าง 22)" desc="ครองเตียง 31.25%" />
             <WardCard title="HOMEWARD" subtitle="Admit 4 / 30 เตียง (ว่าง 26)" desc="ครองเตียง 13.33%" />
