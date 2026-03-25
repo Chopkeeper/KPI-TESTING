@@ -10,11 +10,18 @@ import { MISDashboard } from '@/src/components/dashboard/MISDashboard';
 import { StrategicKPI } from '@/src/components/dashboard/StrategicKPI';
 import { BackofficeMonitor } from '@/src/components/dashboard/BackofficeMonitor';
 import { ReportCenter } from '@/src/components/dashboard/ReportCenter';
+import { DataAndStats } from '@/src/components/dashboard/DataAndStats';
+import { DepartmentDashboard } from '@/src/components/dashboard/DepartmentDashboard';
 
 export default function App() {
   const [currentView, setCurrentView] = useState('dashboard');
 
   const renderContent = () => {
+    if (currentView.startsWith('dept-')) {
+      const deptId = currentView.replace('dept-', '');
+      return <DepartmentDashboard departmentId={deptId} />;
+    }
+
     switch (currentView) {
       case 'strategic-kpi':
         return <StrategicKPI />;
@@ -22,6 +29,8 @@ export default function App() {
         return <BackofficeMonitor />;
       case 'reports':
         return <ReportCenter />;
+      case 'data-stats':
+        return <DataAndStats />;
       case 'dashboard':
       default:
         return <MISDashboard />;

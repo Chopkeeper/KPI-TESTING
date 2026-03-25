@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Home, Folder, User, Users, Stethoscope, Activity, Ambulance, Syringe, ShieldAlert, HeartPulse, Accessibility, Beaker, FileText, Search, BookOpen, ChevronLeft, Target, Server, FileSpreadsheet } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 
@@ -8,6 +8,8 @@ interface SidebarProps {
 }
 
 export function Sidebar({ currentView = 'dashboard', setCurrentView = () => {} }: SidebarProps) {
+  const [isDataMenuOpen, setIsDataMenuOpen] = useState(false);
+
   return (
     <div className="flex flex-col w-[230px] bg-[#222d32] text-[#b8c7ce] h-screen overflow-y-auto text-sm shrink-0">
       {/* Logo Area */}
@@ -64,29 +66,40 @@ export function Sidebar({ currentView = 'dashboard', setCurrentView = () => {} }
         </li>
 
         <li className="flex flex-col mt-2">
-          <div className="flex items-center justify-between px-4 py-3 hover:bg-[#1e282c] hover:text-white cursor-pointer border-l-4 border-transparent transition-colors">
+          <div 
+            className="flex items-center justify-between px-4 py-3 hover:bg-[#1e282c] hover:text-white cursor-pointer border-l-4 border-transparent transition-colors"
+            onClick={() => {
+              setIsDataMenuOpen(!isDataMenuOpen);
+              // If opening the menu, go to the general data-stats view
+              if (!isDataMenuOpen) {
+                setCurrentView('data-stats');
+              }
+            }}
+          >
             <div className="flex items-center gap-2">
               <Folder size={16} />
-              <span>ข้อมูลและสถิติ</span>
+              <span className={currentView === 'data-stats' || currentView?.startsWith('dept-') ? 'text-white' : ''}>ข้อมูลและสถิติ</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="bg-[#3c8dbc] text-white text-[10px] px-1.5 py-0.5 rounded">10</span>
-              <ChevronLeft size={14} className="-rotate-90" />
+              <ChevronLeft size={14} className={cn("transition-transform", isDataMenuOpen ? "-rotate-90" : "")} />
             </div>
           </div>
-          <ul className="bg-[#2c3b41] py-1">
-            <SubMenuItem icon={<User size={14} />} label="ผู้รับบริการ" />
-            <SubMenuItem icon={<Users size={14} />} label="ผู้ป่วยใน" badge="9" badgeColor="bg-red-500" />
-            <SubMenuItem icon={<Stethoscope size={14} />} label="ทันตกรรม" />
-            <SubMenuItem icon={<Activity size={14} />} label="แพทย์แผนไทย" />
-            <SubMenuItem icon={<Ambulance size={14} />} label="อุบัติเหตุและฉุกเฉิน" />
-            <SubMenuItem icon={<Syringe size={14} />} label="ผ่าตัดและวิสัญญี" />
-            <SubMenuItem icon={<ShieldAlert size={14} />} label="โรคติดต่อ CD" />
-            <SubMenuItem icon={<HeartPulse size={14} />} label="โรคไม่ติดต่อ NCD" />
-            <SubMenuItem icon={<Accessibility size={14} />} label="กายภาพบำบัด" />
-            <SubMenuItem icon={<Beaker size={14} />} label="ไตเทียม" />
-            <SubMenuItem icon={<FileText size={14} />} label="ชันสูตรและ X-Ray" />
-          </ul>
+          {isDataMenuOpen && (
+            <ul className="bg-[#2c3b41] py-1">
+              <SubMenuItem icon={<User size={14} />} label="ผู้รับบริการ" active={currentView === 'dept-opd'} onClick={() => setCurrentView('dept-opd')} />
+              <SubMenuItem icon={<Users size={14} />} label="ผู้ป่วยใน" badge="9" badgeColor="bg-red-500" active={currentView === 'dept-ipd'} onClick={() => setCurrentView('dept-ipd')} />
+              <SubMenuItem icon={<Stethoscope size={14} />} label="ทันตกรรม" active={currentView === 'dept-dental'} onClick={() => setCurrentView('dept-dental')} />
+              <SubMenuItem icon={<Activity size={14} />} label="แพทย์แผนไทย" active={currentView === 'dept-thai-med'} onClick={() => setCurrentView('dept-thai-med')} />
+              <SubMenuItem icon={<Ambulance size={14} />} label="อุบัติเหตุและฉุกเฉิน" active={currentView === 'dept-er'} onClick={() => setCurrentView('dept-er')} />
+              <SubMenuItem icon={<Syringe size={14} />} label="ผ่าตัดและวิสัญญี" active={currentView === 'dept-or'} onClick={() => setCurrentView('dept-or')} />
+              <SubMenuItem icon={<ShieldAlert size={14} />} label="โรคติดต่อ CD" active={currentView === 'dept-cd'} onClick={() => setCurrentView('dept-cd')} />
+              <SubMenuItem icon={<HeartPulse size={14} />} label="โรคไม่ติดต่อ NCD" active={currentView === 'dept-ncd'} onClick={() => setCurrentView('dept-ncd')} />
+              <SubMenuItem icon={<Accessibility size={14} />} label="กายภาพบำบัด" active={currentView === 'dept-pt'} onClick={() => setCurrentView('dept-pt')} />
+              <SubMenuItem icon={<Beaker size={14} />} label="ไตเทียม" active={currentView === 'dept-hemo'} onClick={() => setCurrentView('dept-hemo')} />
+              <SubMenuItem icon={<FileText size={14} />} label="ชันสูตรและ X-Ray" active={currentView === 'dept-lab-xray'} onClick={() => setCurrentView('dept-lab-xray')} />
+            </ul>
+          )}
         </li>
         
         <SidebarItem icon={<Search size={16} />} label="ค้นผล LAB" />
@@ -132,9 +145,15 @@ function SidebarItem({ icon, label, active, onClick }: { icon: React.ReactNode, 
   );
 }
 
-function SubMenuItem({ icon, label, badge, badgeColor }: { icon: React.ReactNode, label: string, badge?: string, badgeColor?: string }) {
+function SubMenuItem({ icon, label, badge, badgeColor, active, onClick }: { icon: React.ReactNode, label: string, badge?: string, badgeColor?: string, active?: boolean, onClick?: () => void }) {
   return (
-    <li className="flex items-center justify-between px-4 py-2 pl-8 hover:text-white cursor-pointer text-xs transition-colors">
+    <li 
+      onClick={onClick}
+      className={cn(
+        "flex items-center justify-between px-4 py-2 pl-8 hover:text-white cursor-pointer text-xs transition-colors",
+        active ? "text-white bg-[#1e282c]" : ""
+      )}
+    >
       <div className="flex items-center gap-2">
         {icon}
         <span>{label}</span>
