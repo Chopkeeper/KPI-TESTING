@@ -9,6 +9,7 @@ interface SidebarProps {
 
 export function Sidebar({ currentView = 'dashboard', setCurrentView = () => {} }: SidebarProps) {
   const [isDataMenuOpen, setIsDataMenuOpen] = useState(false);
+  const [isVaccineMenuOpen, setIsVaccineMenuOpen] = useState(false);
 
   return (
     <div className="flex flex-col w-[230px] bg-[#222d32] text-[#b8c7ce] h-screen overflow-y-auto text-sm shrink-0">
@@ -32,9 +33,9 @@ export function Sidebar({ currentView = 'dashboard', setCurrentView = () => {} }
       </div>
       
       {/* Sidebar Menu */}
-      <div className="px-4 py-2 text-xs text-[#4b646f] uppercase bg-[#1a2226]">เมนูหลัก</div>
-      
       <ul className="flex flex-col pb-4">
+        <li className="px-4 py-2 text-xs text-[#4b646f] uppercase bg-[#1a2226]">เมนูหลัก</li>
+        
         <SidebarItem 
           icon={<Home size={16} />} 
           label="Home Dashboard" 
@@ -43,27 +44,25 @@ export function Sidebar({ currentView = 'dashboard', setCurrentView = () => {} }
         />
         
         {/* New Management Section */}
-        <li className="flex flex-col mt-2">
-          <div className="px-4 py-2 text-xs text-[#4b646f] uppercase bg-[#1a2226]">ระบบบริหารจัดการ</div>
-          <SidebarItem 
-            icon={<Target size={16} />} 
-            label="KPI ยุทธศาสตร์องค์กร" 
-            active={currentView === 'strategic-kpi'} 
-            onClick={() => setCurrentView('strategic-kpi')}
-          />
-          <SidebarItem 
-            icon={<Server size={16} />} 
-            label="Monitor ระบบ Backoffice" 
-            active={currentView === 'backoffice'} 
-            onClick={() => setCurrentView('backoffice')}
-          />
-          <SidebarItem 
-            icon={<FileSpreadsheet size={16} />} 
-            label="ระบบขอ/ส่งออกรายงาน" 
-            active={currentView === 'reports'} 
-            onClick={() => setCurrentView('reports')}
-          />
-        </li>
+        <li className="px-4 py-2 text-xs text-[#4b646f] uppercase bg-[#1a2226] mt-2">ระบบบริหารจัดการ</li>
+        <SidebarItem 
+          icon={<Target size={16} />} 
+          label="KPI ยุทธศาสตร์องค์กร" 
+          active={currentView === 'strategic-kpi'} 
+          onClick={() => setCurrentView('strategic-kpi')}
+        />
+        <SidebarItem 
+          icon={<Server size={16} />} 
+          label="Monitor ระบบ Backoffice" 
+          active={currentView === 'backoffice'} 
+          onClick={() => setCurrentView('backoffice')}
+        />
+        <SidebarItem 
+          icon={<FileSpreadsheet size={16} />} 
+          label="ระบบขอ/ส่งออกรายงาน" 
+          active={currentView === 'reports'} 
+          onClick={() => setCurrentView('reports')}
+        />
 
         <li className="flex flex-col mt-2">
           <div 
@@ -102,21 +101,44 @@ export function Sidebar({ currentView = 'dashboard', setCurrentView = () => {} }
           )}
         </li>
         
-        <SidebarItem icon={<Search size={16} />} label="ค้นผล LAB" />
-        <SidebarItem icon={<Search size={16} />} label="ข้อมูล Vaccine" />
+        <SidebarItem 
+          icon={<Search size={16} />} 
+          label="ค้นผล LAB" 
+          active={currentView === 'lab-search'} 
+          onClick={() => setCurrentView('lab-search')}
+        />
         
+        {/* Vaccine Menu */}
         <li className="flex flex-col">
-          <div className="flex items-center justify-between px-4 py-3 hover:bg-[#1e282c] hover:text-white cursor-pointer border-l-4 border-transparent transition-colors">
+          <div 
+            className="flex items-center justify-between px-4 py-3 hover:bg-[#1e282c] hover:text-white cursor-pointer border-l-4 border-transparent transition-colors"
+            onClick={() => {
+              setIsVaccineMenuOpen(!isVaccineMenuOpen);
+              if (!isVaccineMenuOpen) setCurrentView('vaccine-dashboard');
+            }}
+          >
             <div className="flex items-center gap-2">
-              <BookOpen size={16} />
-              <span>คู่มือใช้งาน</span>
+              <Syringe size={16} />
+              <span className={currentView?.startsWith('vaccine') ? 'text-white' : ''}>งานวัคซีน (Vaccine)</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="bg-[#3c8dbc] text-white text-[10px] px-1.5 py-0.5 rounded">4</span>
-              <ChevronLeft size={14} />
+              <ChevronLeft size={14} className={cn("transition-transform", isVaccineMenuOpen ? "-rotate-90" : "")} />
             </div>
           </div>
+          {isVaccineMenuOpen && (
+            <ul className="bg-[#2c3b41] py-1">
+              <SubMenuItem icon={<Activity size={14} />} label="Dashboard วัคซีน" active={currentView === 'vaccine-dashboard'} onClick={() => setCurrentView('vaccine-dashboard')} />
+              <SubMenuItem icon={<Search size={14} />} label="ข้อมูลการฉีดวัคซีน" active={currentView === 'vaccine-data'} onClick={() => setCurrentView('vaccine-data')} />
+            </ul>
+          )}
         </li>
+        
+        <SidebarItem 
+          icon={<BookOpen size={16} />} 
+          label="คู่มือใช้งาน" 
+          active={currentView === 'user-manual'} 
+          onClick={() => setCurrentView('user-manual')}
+        />
       </ul>
 
       <div className="mt-auto p-4 text-xs text-[#4b646f]">

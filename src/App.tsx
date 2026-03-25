@@ -12,6 +12,10 @@ import { BackofficeMonitor } from '@/src/components/dashboard/BackofficeMonitor'
 import { ReportCenter } from '@/src/components/dashboard/ReportCenter';
 import { DataAndStats } from '@/src/components/dashboard/DataAndStats';
 import { DepartmentDashboard } from '@/src/components/dashboard/DepartmentDashboard';
+import { LabSearch } from '@/src/components/dashboard/LabSearch';
+import { VaccineDashboard } from '@/src/components/dashboard/VaccineDashboard';
+import { VaccineData } from '@/src/components/dashboard/VaccineData';
+import { UserManual } from '@/src/components/dashboard/UserManual';
 
 export default function App() {
   const [currentView, setCurrentView] = useState('dashboard');
@@ -31,6 +35,14 @@ export default function App() {
         return <ReportCenter />;
       case 'data-stats':
         return <DataAndStats />;
+      case 'lab-search':
+        return <LabSearch />;
+      case 'vaccine-dashboard':
+        return <VaccineDashboard />;
+      case 'vaccine-data':
+        return <VaccineData />;
+      case 'user-manual':
+        return <UserManual />;
       case 'dashboard':
       default:
         return <MISDashboard />;
